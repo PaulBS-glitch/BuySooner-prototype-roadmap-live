@@ -9,8 +9,26 @@
         opacity:.50!important;
         filter:saturate(.98) contrast(1)!important;
       }
+      .rm7-split-panel{
+        display:grid!important;
+        grid-template-columns:1fr!important;
+        gap:16px!important;
+        align-items:start!important;
+        justify-items:center!important;
+        text-align:left!important;
+      }
       .rm7-split-panel h3{
         white-space:nowrap!important;
+        text-align:center!important;
+      }
+      .rm7-split-panel > div:not(.rm7-orb){
+        width:100%!important;
+      }
+      .rm7-orb{
+        margin:0 auto 2px!important;
+      }
+      .rm7-split-line{
+        width:100%!important;
       }
       .rm7-trade{
         display:grid!important;
@@ -83,6 +101,10 @@
 
   function postProcessPage7(root){
     if(!root) return;
+
+    var tradeTitle=root.querySelector('.rm7-trade-title');
+    if(tradeTitle){tradeTitle.textContent='The Deal in Plain English';}
+
     var panels=root.querySelectorAll('.rm7-split-panel');
     if(panels && panels[1]){
       var heading=panels[1].querySelector('h3');
