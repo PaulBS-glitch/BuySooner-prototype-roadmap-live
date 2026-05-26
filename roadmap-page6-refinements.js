@@ -4,8 +4,14 @@
   function applyPage6Refinements(data,root){
     var d=data||{},c=d.customer||{};
     var customerName=String(c.name||'Customer').trim()||'Customer';
+
     var heading=root&&root.querySelector?root.querySelector('.rm6-map-intro h2'):null;
-    if(heading){heading.innerHTML='<span>'+esc(customerName)+'</span>, let&rsquo;s map this out together&hellip;';}
+    if(heading){heading.innerHTML='<span>'+esc(customerName)+'</span>, here is your pathway to 100% ownership.';}
+
+    var bottomCopy=root&&root.querySelector?root.querySelector('.rm6-bottom-copy p'):null;
+    if(bottomCopy){
+      bottomCopy.innerHTML='Stop waiting for the perfect market. Use the bridge to get moving, build equity, and refinance when the numbers support it.<strong>Our goal is simple: help you buy sooner, then step out when the structure has done its job.</strong>';
+    }
   }
   function wrap(){
     if(!window.renderRoadmapPage6||window.renderRoadmapPage6.__bsRefined)return;
