@@ -39,7 +39,6 @@ var up=String(c.buyerType||'renter').toLowerCase().indexOf('upgrad')>-1;
 var customerName=String(c.name||'Customer').trim()||'Customer';
 var suburb=String(p.suburb||'').trim(),address=String(p.address||'').trim();
 var targetProperty=address||suburb||'Not supplied';
-if(address&&suburb&&address.toLowerCase().indexOf(suburb.toLowerCase())===-1)targetProperty=address+', '+suburb;
 var introPlace=(targetProperty&&targetProperty!=='Not supplied')?' at <strong>'+esc(targetProperty)+'</strong>':'';
 addStyle();
 var date=new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
