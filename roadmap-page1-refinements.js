@@ -1,11 +1,6 @@
 /* BuySooner Roadmap Page 1 refinements */
 (function(){
   function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];});}
-  function firstTwoNames(fullName){
-    var parts=String(fullName||'').trim().split(/\s+/).filter(Boolean);
-    if(parts.length>=2)return parts[0]+' and '+parts[1];
-    return parts[0]||'you';
-  }
   function formatAddress(value){
     var s=String(value||'').trim();
     if(!s)return '';
@@ -18,8 +13,20 @@
     if(!root||!root.querySelector)return;
     var d=data||{},c=d.customer||{},p=d.property||{};
     var customerName=String(c.name||c.fullName||'Customer').trim()||'Customer';
-    var heroName=root.querySelector('.rm-hero h1 span');
-    if(heroName){heroName.textContent=customerName+'.';}
+
+    var heroHeading=root.querySelector('.rm-hero h1');
+    if(heroHeading){heroHeading.textContent='Welcome Home,';}
+
+    var heroSubheading=root.querySelector('.rm-hero h2');
+    if(heroSubheading){
+      heroSubheading.classList.add('rm-page1-subheader');
+      heroSubheading.innerHTML='<span class="rm-page1-name-highlight">'+esc(customerName)+'</span>, this is your Personalised Path to Ownership.';
+    }
+
+    var heroBody=root.querySelector('.rm-hero p');
+    if(heroBody){
+      heroBody.textContent='Discover your strategy to buy sooner, with a clear deposit bridge and a defined refinance pathway.';
+    }
 
     var address=formatAddress(p.address||'');
     var suburb=formatAddress(p.suburb||'');
@@ -50,7 +57,7 @@
     if(!document.getElementById(styleId)){
       var s=document.createElement('style');
       s.id=styleId;
-      s.textContent='.rm-hero h1 span{font-size:.64em!important;white-space:nowrap!important;line-height:1.02!important}.rm-hero>div{max-width:780px!important;padding-right:72px!important}.rm-intro-lede{max-width:860px!important}.rm-step{min-height:286px!important}.rm-step h3{margin-bottom:8px!important}.rm-step-line{margin:0 auto;max-width:260px;color:#526071;font-size:14.6px;line-height:1.35;font-weight:760;text-align:center}@media(max-width:900px){.rm-hero h1 span{white-space:normal!important;font-size:.72em!important}.rm-hero>div{padding-right:0!important}.rm-step{min-height:auto!important}}';
+      s.textContent='.rm-hero h1{margin-bottom:10px!important}.rm-hero>div{max-width:820px!important;padding-right:72px!important}.rm-page1-subheader{margin:0 0 10px!important;color:#071f3a!important;font-size:25px!important;line-height:1.2!important;font-weight:900!important;letter-spacing:-.02em!important}.rm-page1-name-highlight{color:#087a78!important}.rm-hero p{max-width:760px!important;font-size:17px!important;line-height:1.45!important}.rm-intro-lede{max-width:860px!important}.rm-step{min-height:286px!important}.rm-step h3{margin-bottom:8px!important}.rm-step-line{margin:0 auto;max-width:260px;color:#526071;font-size:14.6px;line-height:1.35;font-weight:760;text-align:center}@media(max-width:900px){.rm-hero>div{padding-right:0!important}.rm-page1-subheader{font-size:22px!important}.rm-hero p{font-size:16px!important}.rm-step{min-height:auto!important}}';
       document.head.appendChild(s);
     }
   }
