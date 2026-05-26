@@ -1,4 +1,4 @@
-/* Page 10 refinement layer: FAQ hero, accordion readability and bottom callout copy. */
+/* Page 10 refinement layer: FAQ hero, accordion readability and bottom callout copy. Also loads Page 11 support-pathway refinements. */
 (function(){
   function injectPage10RefinementStyles(){
     var old=document.getElementById('roadmap-page10-refinement-style');
@@ -155,9 +155,96 @@
     }
   }
 
-  function wrapWhenReady(){
+  function injectPage11RefinementStyles(){
+    if(document.getElementById('roadmap-page11-refinement-style')) return;
+    var style=document.createElement('style');
+    style.id='roadmap-page11-refinement-style';
+    style.textContent=`
+      .rm11-routing{
+        margin-top:0!important;
+        margin-bottom:22px!important;
+      }
+      .rm11-contact-grid{
+        margin-top:0!important;
+      }
+      .rm11-simple{
+        padding:28px!important;
+      }
+      .rm11-simple h2{
+        font-size:31px!important;
+        color:#087a78!important;
+        margin-bottom:20px!important;
+      }
+      .rm11-simple-flow{
+        display:grid!important;
+        grid-template-columns:repeat(3,minmax(0,1fr))!important;
+        gap:16px!important;
+        align-items:stretch!important;
+      }
+      .rm11-simple-col{
+        background:#fff!important;
+        border:1px solid rgba(8,122,120,.22)!important;
+        border-radius:18px!important;
+        padding:19px 18px!important;
+        text-align:center!important;
+        min-height:138px!important;
+        box-shadow:0 10px 22px rgba(12,51,88,.045)!important;
+      }
+      .rm11-simple-col h3{
+        margin:0 0 10px!important;
+        color:#071f3a!important;
+        font-size:19px!important;
+        line-height:1.12!important;
+        font-weight:950!important;
+        letter-spacing:-.025em!important;
+      }
+      .rm11-simple-col p{
+        margin:0!important;
+        color:#526071!important;
+        font-size:14.6px!important;
+        line-height:1.42!important;
+        font-weight:760!important;
+      }
+      @media(max-width:900px){
+        .rm11-simple-flow{grid-template-columns:1fr!important;}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function postProcessPage11(root){
+    if(!root||!root.querySelector) return;
+    var page=root.querySelector('.rm11-page');
+    if(!page) return;
+
+    var heroParagraphs=page.querySelectorAll('.rm11-title p');
+    Array.prototype.slice.call(heroParagraphs).forEach(function(p){
+      if(/We are here to help\. BuySooner can explain the bridge/i.test(p.textContent||'')){
+        p.remove();
+      }
+    });
+
+    var routing=page.querySelector('.rm11-routing');
+    var supportTitle=page.querySelector('.rm11-section-title');
+    if(routing&&supportTitle&&routing.previousElementSibling!==supportTitle){
+      supportTitle.parentNode.insertBefore(routing,supportTitle);
+    }
+
+    var simple=page.querySelector('.rm11-simple');
+    if(simple){
+      var h2=simple.querySelector('h2');
+      var flow=simple.querySelector('.rm11-simple-flow');
+      if(h2) h2.textContent='Buy sooner';
+      if(flow&&flow.dataset.bsRefined!=='true'){
+        flow.dataset.bsRefined='true';
+        flow.innerHTML='<article class="rm11-simple-col"><h3>1. From Day One</h3><p>You own the home, and your bank loan stays normal.</p></article><article class="rm11-simple-col"><h3>2. Every Month</h3><p>No monthly BuySooner payments. You make your normal bank mortgage repayments.</p></article><article class="rm11-simple-col"><h3>3. At the End</h3><p>BuySooner is repaid at exit, and you keep building your future.</p></article>';
+      }
+    }
+  }
+
+  function wrapPage10WhenReady(){
     if(typeof window.renderRoadmapPage10!=='function'){
-      setTimeout(wrapWhenReady,30);
+      setTimeout(wrapPage10WhenReady,30);
       return;
     }
     if(window.renderRoadmapPage10.__page10Refined) return;
@@ -171,6 +258,25 @@
     window.renderRoadmapPage10.__page10Refined=true;
   }
 
+  function wrapPage11WhenReady(){
+    if(typeof window.renderRoadmapPage11!=='function'){
+      setTimeout(wrapPage11WhenReady,30);
+      return;
+    }
+    if(window.renderRoadmapPage11.__page11Refined) return;
+    var original=window.renderRoadmapPage11;
+    window.renderRoadmapPage11=function(data,root){
+      original(data,root);
+      injectPage11RefinementStyles();
+      postProcessPage11(root);
+      setTimeout(function(){postProcessPage11(root);},0);
+      setTimeout(function(){postProcessPage11(root);},120);
+    };
+    window.renderRoadmapPage11.__page11Refined=true;
+  }
+
   injectPage10RefinementStyles();
-  wrapWhenReady();
+  injectPage11RefinementStyles();
+  wrapPage10WhenReady();
+  wrapPage11WhenReady();
 })();
