@@ -19,6 +19,7 @@
 
 (function () {
   const STORAGE_KEY = "BuySoonerRoadmapData";
+  const PLACEHOLDER_ADDRESSES = ["42 rangers avenue"];
 
   function loadResponsiveStylesheet() {
     if (document.getElementById("roadmap-responsive-style")) return;
@@ -33,6 +34,10 @@
 
   function text(value) {
     return String(value == null ? "" : value).trim();
+  }
+
+  function normalisedText(value) {
+    return text(value).toLowerCase();
   }
 
   function num(value) {
@@ -120,6 +125,47 @@
     });
 
     return values;
+  }
+
+  function addressKnownFromInputs(rawInputs) {
+    const selected = checkedValue(["addressKnown"]);
+    const raw = selected || (rawInputs ? rawInputs.addressKnown : "");
+    const value = normalisedText(raw);
+    return value === "yes" || value === "true" || value === "known" || value === "address" || value.includes("yes");
+  }
+
+  function isPlaceholderAddress(value) {
+    const cleaned = normalisedText(value).replace(/,?\s*nsw\s*\d{4}$/i, "").trim();
+    return PLACEHOLDER_ADDRESSES.includes(cleaned);
+  }
+
+  function shouldSuppressAddress(rawInputs, address) {
+    if (!address) return true;
+    if (addressKnownFromInputs(rawInputs)) return false;
+    return true;
+  }
+
+  function normaliseRoadmapData(data) {
+    if (!data || typeof data !== "object") return data;
+    data.property = data.property || {};
+    data.rawInputs = data.rawInputs || {};
+
+    const address = text(data.property.address);
+    const known = addressKnownFromInputs(data.rawInputs);
+
+    if (!known || isPlaceholderAddress(address)) {
+      data.property.address = "";
+    }
+
+    if (!data.property.suburb) {
+      data.property.suburb =
+        text(data.rawInputs.preSuburb) ||
+        text(data.rawInputs.targetSuburb) ||
+        text(data.rawInputs.targetArea) ||
+        "your target area";
+    }
+
+    return data;
   }
 
   function inferBuyerType(rawType) {
@@ -226,13 +272,15 @@
 
     const buyerType = inferBuyerType(buyerTypeRaw);
 
-    const propertyAddress = firstExisting([
+    const capturedAddress = firstExisting([
       "address",
       "preAddress",
       "propertyAddress",
       "targetAddress",
       "targetPropertyAddress"
     ]);
+
+    const propertyAddress = shouldSuppressAddress(rawInputs, capturedAddress) ? "" : capturedAddress;
 
     const targetArea = firstExisting([
       "preSuburb",
@@ -357,7 +405,7 @@
       "brokerBusiness"
     ]);
 
-    const data = {
+    const data = normaliseRoadmapData({
       capturedAt: new Date().toISOString(),
       source: "BuySooner prototype",
       rawInputs,
@@ -411,7 +459,7 @@
       },
 
       derived: {}
-    };
+    });
 
     data.derived = calculateRoadmapDerived(data);
     data.finance.buySoonerBoost = data.derived.buySoonerBoost;
@@ -421,17 +469,19 @@
   }
 
   function saveRoadmapData(data) {
-    const finalData = data || collectRoadmapData();
+    const finalData = normaliseRoadmapData(data || collectRoadmapData());
     window.BuySoonerRoadmapData = finalData;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(finalData));
     return finalData;
   }
 
   function loadRoadmapData() {
-    if (window.BuySoonerRoadmapData) return window.BuySoonerRoadmapData;
+    if (window.BuySoonerRoadmapData) return normaliseRoadmapData(window.BuySoonerRoadmapData);
 
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      const data = normaliseRoadmapData(JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"));
+      if (data) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return data;
     } catch (_) {
       return null;
     }
