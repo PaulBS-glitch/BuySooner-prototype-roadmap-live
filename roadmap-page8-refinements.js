@@ -11,16 +11,10 @@
     s=s.replace(/^(Unit\s+\d+)\s+(\d+\s+)/i,'$1, $2');
     return titleCaseCaps(s);
   }
-  function normaliseLocation(value){
-    return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-  }
   function buildLocation(property){
     var p=property||{};
     var address=formatAddress(p.address||p.propertyAddress||p.targetAddress||p.targetPropertyAddress||'');
     var suburb=formatAddress(p.suburb||p.targetSuburb||p.targetArea||p.preferredSuburb||p.targetLocation||p.area||'');
-    var addressNorm=normaliseLocation(address);
-    var suburbNorm=normaliseLocation(suburb);
-    if(address&&suburb&&suburbNorm&&addressNorm.indexOf(suburbNorm)===-1){return address+', '+suburb;}
     return address||suburb||'';
   }
   function applyPage8Refinements(data,root){
