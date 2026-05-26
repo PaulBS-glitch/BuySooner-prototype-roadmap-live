@@ -13,12 +13,44 @@
     if(customerName&&clean(customerName.value)) return clean(customerName.value);
     return '';
   }
+  function selectedAddressKnown(){
+    var checked=document.querySelector('input[name="addressKnown"]:checked');
+    return checked?clean(checked.value).toLowerCase():'';
+  }
+  function sanitizeRoadmapAddressBeforeCapture(){
+    var addressKnown=selectedAddressKnown();
+    if(addressKnown==='yes') return;
+
+    try{
+      if(typeof scenario!=='undefined'&&scenario){
+        scenario.locationType='area';
+        scenario.propertyAddress='';
+        if(scenario.preApply){
+          scenario.preApply.propertyAddress='';
+        }
+      }
+    }catch(_){ }
+
+    var address=document.getElementById('address');
+    var preAddress=document.getElementById('preAddress');
+    if(address) address.value='';
+    if(preAddress) preAddress.value='';
+
+    try{
+      var stored=JSON.parse(localStorage.getItem('BuySoonerRoadmapData')||'null');
+      if(stored&&stored.property){
+        stored.property.address='';
+        localStorage.setItem('BuySoonerRoadmapData',JSON.stringify(stored));
+      }
+    }catch(_){ }
+  }
   function launchRoadmap(event){
     if(event){
       event.preventDefault();
       event.stopPropagation();
       if(event.stopImmediatePropagation) event.stopImmediatePropagation();
     }
+    sanitizeRoadmapAddressBeforeCapture();
     if(window.BSRoadmap&&typeof window.BSRoadmap.captureAndOpenRoadmap==='function'){
       window.BSRoadmap.captureAndOpenRoadmap();
       return false;
