@@ -128,6 +128,61 @@
     font-size: 18px !important;
     line-height: 1.38 !important;
   }
+
+  .rm5-shift {
+    padding: 22px 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .rm5-shift h2 {
+    margin-bottom: 16px !important;
+    font-size: 27px !important;
+    line-height: 1.12 !important;
+  }
+
+  .rm5-shift-table {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .rm5-shift-head {
+    padding: 13px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    min-height: 0 !important;
+  }
+
+  .rm5-shift-head.right {
+    border-top: 0 !important;
+  }
+
+  .rm5-shift-cell {
+    padding: 13px 12px !important;
+    min-height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 13.5px !important;
+    line-height: 1.25 !important;
+    font-weight: 850 !important;
+  }
+
+  .rm5-shift-cell.right {
+    background: #f0f8f7 !important;
+    color: #056261 !important;
+    border-left: 1px solid #d7e5e4 !important;
+  }
+
+  .rm5-shift-cell:nth-child(4n),
+  .rm5-shift-cell:nth-child(4n-1) {
+    background: #f7fbfb !important;
+  }
+
+  .rm5-shift-cell.right:nth-child(4n),
+  .rm5-shift-cell.right:nth-child(4n-1) {
+    background: #edf8f7 !important;
+  }
 }
 
 @media (max-width: 420px) {
@@ -154,5 +209,24 @@
 
   .rm3-step {
     padding: 16px !important;
+  }
+
+  .rm5-shift {
+    padding: 20px 16px !important;
+  }
+
+  .rm5-shift h2 {
+    font-size: 25px !important;
+  }
+
+  .rm5-shift-head {
+    font-size: 12.5px !important;
+    padding: 12px 8px !important;
+  }
+
+  .rm5-shift-cell {
+    font-size: 13px !important;
+    padding: 12px 10px !important;
+    min-height: 56px !important;
   }
 }
