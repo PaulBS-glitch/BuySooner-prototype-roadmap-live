@@ -1,0 +1,79 @@
+/* BuySooner Roadmap mobile rendering fixes
+   Loaded from roadmap.html. Keeps page-specific injected styles intact while correcting mobile-only layout issues. */
+
+@media (max-width: 900px) {
+  .rmdream-page {
+    padding: 28px 20px 30px !important;
+  }
+
+  .rmdream-brand {
+    display: flex !important;
+    grid-template-columns: none !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .rmdream-brand > div:first-child {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: 56% !important;
+  }
+
+  .rmdream-label {
+    flex: 0 0 auto !important;
+    max-width: 42% !important;
+    text-align: right !important;
+    font-size: 10.5px !important;
+    line-height: 1.25 !important;
+    font-weight: 850 !important;
+    padding-top: 2px !important;
+  }
+
+  .rmdream-logo {
+    font-size: 24px !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .rmdream-mark {
+    width: 58px !important;
+    height: 6px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .rmdream-tag {
+    font-size: 11px !important;
+  }
+
+  .rmdream-title {
+    font-size: clamp(32px, 9.4vw, 36px) !important;
+    line-height: 1.04 !important;
+    letter-spacing: -0.052em !important;
+    max-width: 100% !important;
+  }
+
+  .rmdream-divider {
+    margin: 18px auto 16px !important;
+  }
+
+  .rmdream-sub {
+    font-size: 20px !important;
+    line-height: 1.24 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .rmdream-page {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  .rmdream-title {
+    font-size: clamp(31px, 9vw, 34px) !important;
+  }
+
+  .rmdream-label {
+    font-size: 10px !important;
+  }
+}
