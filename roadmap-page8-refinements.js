@@ -11,13 +11,23 @@
     s=s.replace(/^(Unit\s+\d+)\s+(\d+\s+)/i,'$1, $2');
     return titleCaseCaps(s);
   }
+  function normaliseLocation(value){
+    return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  }
+  function buildLocation(property){
+    var p=property||{};
+    var address=formatAddress(p.address||p.propertyAddress||p.targetAddress||p.targetPropertyAddress||'');
+    var suburb=formatAddress(p.suburb||p.targetSuburb||p.targetArea||p.preferredSuburb||p.targetLocation||p.area||'');
+    var addressNorm=normaliseLocation(address);
+    var suburbNorm=normaliseLocation(suburb);
+    if(address&&suburb&&suburbNorm&&addressNorm.indexOf(suburbNorm)===-1){return address+', '+suburb;}
+    return address||suburb||'';
+  }
   function applyPage8Refinements(data,root){
     if(!root||!root.querySelector)return;
     var d=data||{},c=d.customer||{},p=d.property||{};
     var customerName=String(c.name||c.fullName||'Customer').trim()||'Customer';
-    var address=formatAddress(p.address||'');
-    var suburb=formatAddress(p.suburb||'');
-    var target=address||suburb;
+    var target=buildLocation(p);
 
     var exampleStrong=root.querySelector('.rm8-example strong');
     if(exampleStrong){
@@ -26,6 +36,11 @@
     var exampleSpan=root.querySelector('.rm8-example span');
     if(exampleSpan){
       exampleSpan.textContent='Using your target price, savings, estimated bank loan and BuySooner Boost.';
+    }
+
+    var solutionLead=root.querySelector('.rm8-solution-lead');
+    if(solutionLead){
+      solutionLead.textContent='Instead of waiting another 3+ years, '+customerName+' uses BuySooner to bridge the deposit gap and buy sooner.';
     }
 
     var takeaway=root.querySelector('.rm8-takeaway p');
