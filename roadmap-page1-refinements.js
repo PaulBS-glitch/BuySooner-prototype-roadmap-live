@@ -9,6 +9,22 @@
     s=s.replace(/^(Unit\s+\d+)\s+(\d+\s+)/i,'$1, $2');
     return s;
   }
+  function normaliseLocation(value){
+    return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  }
+  function buildLocation(property){
+    var p=property||{};
+    var address=formatAddress(p.address||p.propertyAddress||p.targetAddress||p.targetPropertyAddress||'');
+    var suburb=formatAddress(p.suburb||p.targetSuburb||p.targetArea||p.preferredSuburb||p.targetLocation||p.area||'');
+    var addressNorm=normaliseLocation(address);
+    var suburbNorm=normaliseLocation(suburb);
+    if(address&&suburb&&suburbNorm&&addressNorm.indexOf(suburbNorm)===-1){
+      return {text:address+', '+suburb, preposition:'at'};
+    }
+    if(address){return {text:address, preposition:'at'};}
+    if(suburb){return {text:suburb, preposition:'in'};}
+    return {text:'', preposition:'at'};
+  }
   function applyPage1Refinements(data,root){
     if(!root||!root.querySelector)return;
     var d=data||{},c=d.customer||{},p=d.property||{};
@@ -28,12 +44,10 @@
       heroBody.textContent='Discover your strategy to buy sooner, with a clear deposit bridge and a defined refinance pathway.';
     }
 
-    var address=formatAddress(p.address||'');
-    var suburb=formatAddress(p.suburb||'');
-    var target=address||suburb||'';
+    var location=buildLocation(p);
     var intro=root.querySelector('.rm-intro-lede');
     if(intro){
-      intro.innerHTML='This tailored plan shows how you can move from the property chase into your own home'+(target?' at <strong>'+esc(target)+'</strong>':'')+'.';
+      intro.innerHTML='This tailored plan shows how you can move from the property chase into your own home'+(location.text?' '+location.preposition+' <strong>'+esc(location.text)+'</strong>':'')+'.';
     }
 
     var pathwayLines=[
