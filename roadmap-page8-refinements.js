@@ -11,10 +11,26 @@
     s=s.replace(/^(Unit\s+\d+)\s+(\d+\s+)/i,'$1, $2');
     return titleCaseCaps(s);
   }
+  function normalise(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+  function isSydneyArea(value){
+    var v=normalise(value);
+    return ['lower north shore','upper north shore','northern beaches','eastern suburbs','inner west','city inner sydney','hills district','parramatta greater west','sutherland shire','south west sydney','other sydney area'].indexOf(v)>-1;
+  }
+  function cleanAddress(address,suburb){
+    var a=formatAddress(address),s=formatAddress(suburb);
+    if(!a)return '';
+    if(s&&normalise(a)===normalise(s))return '';
+    if(s&&isSydneyArea(s)){
+      var escaped=s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      a=a.replace(new RegExp('\\s*,\\s*'+escaped+'\\s*$','i'),'').trim();
+    }
+    return a;
+  }
   function buildLocation(property){
     var p=property||{};
-    var address=formatAddress(p.address||p.propertyAddress||p.targetAddress||p.targetPropertyAddress||'');
-    var suburb=formatAddress(p.suburb||p.targetSuburb||p.targetArea||p.preferredSuburb||p.targetLocation||p.area||'');
+    var rawSuburb=p.suburb||p.targetSuburb||p.targetArea||p.preferredSuburb||p.targetLocation||p.area||'';
+    var address=cleanAddress(p.address||p.propertyAddress||p.targetAddress||p.targetPropertyAddress||'',rawSuburb);
+    var suburb=formatAddress(rawSuburb);
     return address||suburb||'';
   }
   function applyPage8Refinements(data,root){
