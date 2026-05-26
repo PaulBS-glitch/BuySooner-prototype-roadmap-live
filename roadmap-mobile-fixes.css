@@ -61,6 +61,73 @@
     font-size: 20px !important;
     line-height: 1.24 !important;
   }
+
+  .rm3-exit {
+    padding: 22px 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .rm3-exit h3 {
+    margin-bottom: 16px !important;
+    font-size: 27px !important;
+    line-height: 1.08 !important;
+  }
+
+  .rm3-exit-steps {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .rm3-step {
+    min-height: 0 !important;
+    padding: 17px 18px !important;
+    border-radius: 16px !important;
+  }
+
+  .rm3-step h4 {
+    margin-bottom: 7px !important;
+    font-size: 19px !important;
+    line-height: 1.1 !important;
+  }
+
+  .rm3-step p {
+    font-size: 14.5px !important;
+    line-height: 1.36 !important;
+  }
+
+  .rm3-arrow {
+    min-height: 14px !important;
+    height: 14px !important;
+    line-height: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    font-size: 0 !important;
+  }
+
+  .rm3-arrow::before {
+    content: "↓" !important;
+    display: block !important;
+    color: #087a78 !important;
+    font-size: 20px !important;
+    line-height: 14px !important;
+    font-weight: 950 !important;
+    text-align: center !important;
+  }
+
+  .rm3-summary {
+    padding: 22px 18px !important;
+  }
+
+  .rm3-summary h2 {
+    font-size: 26px !important;
+  }
+
+  .rm3-summary p {
+    font-size: 18px !important;
+    line-height: 1.38 !important;
+  }
 }
 
 @media (max-width: 420px) {
@@ -75,5 +142,17 @@
 
   .rmdream-label {
     font-size: 10px !important;
+  }
+
+  .rm3-exit {
+    padding: 20px 16px !important;
+  }
+
+  .rm3-exit h3 {
+    font-size: 25px !important;
+  }
+
+  .rm3-step {
+    padding: 16px !important;
   }
 }
