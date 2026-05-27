@@ -6,9 +6,10 @@
     var title=root.querySelector('.rm4-hero h1');
     if(title){title.innerHTML='What changes when you<br><span>stop chasing?</span>';}
 
-    var heads=root.querySelectorAll('.rm4-compare-head');
-    if(heads&&heads[0])heads[0].textContent='If you keep waiting';
-    if(heads&&heads[1])heads[1].textContent='If you buy sooner';
+    var waitHead=root.querySelector('.rm4-head-cell.wait h2');
+    var soonerHead=root.querySelector('.rm4-head-cell.sooner h2');
+    if(waitHead)waitHead.textContent='If you keep waiting';
+    if(soonerHead)soonerHead.textContent='With BuySooner';
   }
 
   function wrap(){
